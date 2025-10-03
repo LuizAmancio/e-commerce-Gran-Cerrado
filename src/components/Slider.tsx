@@ -1,3 +1,5 @@
+"use client";
+
 import { LoadingContext } from "@/context/LoadingContext";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
