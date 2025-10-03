@@ -6,12 +6,12 @@ export const Loading = () => {
         <div className="text-center">
           {/* Logo Animado */}
           <div className="relative mb-8">
-            <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center mx-auto shadow-2xl animate-pulse">
-              <span className="text-6xl">🌳</span>
+            <div className="w-50 h-50 rounded-full flex items-center justify-center mx-auto shadow-2xl animate-pulse">
+              <img className="w-full h-full" alt="Logo Gran Cerrado" src="/logoGran.png"/>
             </div>
             {/* Círculo rotativo */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-40 h-40 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-52 h-52 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
             </div>
           </div>
 
