@@ -2,10 +2,25 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Search, Menu, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 
-const GranCerradoEcommerce = () => {
+type Product = {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  rating: number;
+  oldPrice?: number;
+  discount?: string;
+};
+
+type ProductsByCategory = {
+  ofertas: Product[];
+  maisVendidos: Product[];
+};
+
+const GranCerradoEcommerce: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [cartCount, setCartCount] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState('ofertas');
+  const [selectedCategory, setSelectedCategory] = useState<keyof ProductsByCategory>('ofertas');
 
   const slides = [
     {
@@ -25,7 +40,7 @@ const GranCerradoEcommerce = () => {
     }
   ];
 
-  const products = {
+  const products: ProductsByCategory = {
     ofertas: [
       {
         id: 1,
