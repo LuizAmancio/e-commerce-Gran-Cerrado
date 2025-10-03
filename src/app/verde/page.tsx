@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Search, Menu, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 
-export const GranCerradoEcommerce = () => {
+const GranCerradoEcommerce = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [cartCount, setCartCount] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState('ofertas');
@@ -342,3 +342,5 @@ export const GranCerradoEcommerce = () => {
     </div>
   );
 };
+
+export default GranCerradoEcommerce;
