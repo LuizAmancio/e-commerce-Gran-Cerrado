@@ -1,6 +1,10 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { ShoppingCart, Search, Menu, ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import React, { useState, useEffect, useContext } from 'react';
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { Loading } from '@/components/Loading';
+import { MenuBar } from '@/components/MenuBar';
+import { Slider } from '@/components/Slider';
+import { LoadingContext } from '@/context/LoadingContext';
 
 type Product = {
   id: number;
@@ -18,27 +22,9 @@ type ProductsByCategory = {
 };
 
 const GranCerradoEcommerce: React.FC = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
   const [cartCount, setCartCount] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<keyof ProductsByCategory>('ofertas');
-
-  const slides = [
-    {
-      image: 'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=1200&h=400&fit=crop',
-      title: 'Proteínas Premium',
-      subtitle: 'Até 30% OFF em toda linha'
-    },
-    {
-      image: 'https://images.unsplash.com/photo-1608797178974-15b35a64ede9?w=1200&h=400&fit=crop',
-      title: 'Castanhas do Cerrado',
-      subtitle: 'Naturais e nutritivas'
-    },
-    {
-      image: 'https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=1200&h=400&fit=crop',
-      title: 'Superalimentos',
-      subtitle: 'Energia natural para seus treinos'
-    }
-  ];
+  const { isLoading, setIsLoading } = useContext(LoadingContext);
 
   const products: ProductsByCategory = {
     ofertas: [
@@ -111,128 +97,28 @@ const GranCerradoEcommerce: React.FC = () => {
     ]
   };
 
+   // Simula o carregamento da página
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
-    return () => clearInterval(timer);
+    const loadTimer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000); // 2 segundos de loading
+
+    return () => clearTimeout(loadTimer);
   }, []);
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
 
   const addToCart = () => {
     setCartCount(cartCount + 1);
   };
 
+  if(isLoading) return <Loading />;
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white">
       {/* Header */}
-      <header className="bg-gradient-to-r from-green-700 to-green-600 text-white sticky top-0 z-50 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <button className="lg:hidden">
-              <Menu size={24} />
-            </button>
-            
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-                <span className="text-2xl">🌳</span>
-              </div>
-              <div>
-                <h1 className="text-xl font-bold">GRAN CERRADO</h1>
-                <p className="text-xs text-green-100">Produtos Naturais</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <button className="hover:bg-green-600 p-2 rounded-full transition">
-                <Search size={20} />
-              </button>
-              <button className="hover:bg-green-600 p-2 rounded-full transition relative">
-                <ShoppingCart size={20} />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
-            </div>
-          </div>
-
-          {/* Search Bar */}
-          <div className="mt-3 relative">
-            <input
-              type="text"
-              placeholder="Buscar produtos..."
-              className="w-full px-4 py-2 rounded-full text-gray-800 pr-10"
-            />
-            <Search className="absolute right-3 top-2.5 text-gray-400" size={20} />
-          </div>
-        </div>
-      </header>
+     <MenuBar cartCount={cartCount}/>
 
       {/* Slider */}
-      <div className="max-w-7xl mx-auto px-4 mt-6">
-        <div className="relative rounded-2xl overflow-hidden shadow-xl">
-          <div className="relative h-64 md:h-80">
-            {slides.map((slide, index) => (
-              <div
-                key={index}
-                className={`absolute inset-0 transition-opacity duration-500 ${
-                  index === currentSlide ? 'opacity-100' : 'opacity-0'
-                }`}
-              >
-                <img
-                  src={slide.image}
-                  alt={slide.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex flex-col justify-center px-8 md:px-16">
-                  <h2 className="text-3xl md:text-5xl font-bold text-white mb-2">
-                    {slide.title}
-                  </h2>
-                  <p className="text-lg md:text-xl text-green-300 font-semibold">
-                    {slide.subtitle}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Slider Controls */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full transition"
-          >
-            <ChevronLeft className="text-green-700" size={24} />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full transition"
-          >
-            <ChevronRight className="text-green-700" size={24} />
-          </button>
-
-          {/* Dots */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`w-2 h-2 rounded-full transition ${
-                  index === currentSlide ? 'bg-white w-8' : 'bg-white/50'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
+      <Slider/>
 
       {/* Categories */}
       <div className="max-w-7xl mx-auto px-4 mt-8">
@@ -310,7 +196,7 @@ const GranCerradoEcommerce: React.FC = () => {
 
                 <button
                   onClick={addToCart}
-                  className="w-full mt-3 bg-gradient-to-r from-green-600 to-green-500 text-white py-2 rounded-full font-semibold hover:from-green-700 hover:to-green-600 transition shadow-md hover:shadow-lg"
+                  className="add w-full mt-3 text-white py-2 rounded-full font-semibold hover:from-green-700 hover:to-green-600 transition shadow-md hover:shadow-lg"
                 >
                   Adicionar
                 </button>
