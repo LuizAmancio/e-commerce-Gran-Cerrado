@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --brown: #92400E;
+  --dark-brown: #5D4037;
+  --light-brown: #8D6E63;
 }
 
 @theme inline {
@@ -23,4 +26,12 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.subtitle {
+  color: var(--light-brown);
+}
+
+footer {
+  background: var(--dark-brown);
 }
