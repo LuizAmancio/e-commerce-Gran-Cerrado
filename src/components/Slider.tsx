@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from "react";
 
 export const Slider = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
-    const {isLoading, setIsLoading} = useContext(LoadingContext);
+    const {isLoading} = useContext(LoadingContext);
 
      const slides = [
         {
@@ -27,21 +27,22 @@ export const Slider = () => {
     ];
 
     const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % slides.length);
-    };
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-
-    useEffect(() => {
-        if (!isLoading) {
-        const timer = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % slides.length);
-        }, 5000);
-        return () => clearInterval(timer);
-        }
-    }, [isLoading]);
   };
+
+  useEffect(() => {
+    if (!isLoading) {
+      const timer = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+      }, 5000);
+
+      return () => clearInterval(timer);
+    }
+  }, [isLoading, slides.length]);
 
     return(
         <div className="slider max-w-7xl mx-auto px-4 mt-6">
