@@ -1,12 +1,10 @@
 "use client";
-import React, { useState, useEffect, useContext } from 'react';
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
-import { Loading } from '@/components/Loading';
-import { MenuBar } from '@/components/MenuBar';
-import { Slider } from '@/components/Slider';
-import { LoadingContext } from '@/context/LoadingContext';
 
-type Product = {
+import { CartContext } from "@/context/CartContext";
+import { Star } from "lucide-react";
+import { FC, useContext } from "react"
+
+export type Product = {
   id: number;
   name: string;
   price: number;
@@ -16,17 +14,15 @@ type Product = {
   discount?: string;
 };
 
-type ProductsByCategory = {
+export type ProductsByCategory = {
   ofertas: Product[];
   maisVendidos: Product[];
 };
 
-const GranCerradoEcommerce: React.FC = () => {
-  const [cartCount, setCartCount] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState<keyof ProductsByCategory>('ofertas');
-  const { isLoading, setIsLoading } = useContext(LoadingContext);
+export const ProdutosPorCategoria:FC<{ selectedCategory: keyof ProductsByCategory }> = ({ selectedCategory }) => {
+    const { productsCart,setProductsCart, sizeCart } = useContext(CartContext);
 
-  const products: ProductsByCategory = {
+    const products: ProductsByCategory = {
     ofertas: [
       {
         id: 1,
@@ -95,59 +91,36 @@ const GranCerradoEcommerce: React.FC = () => {
         rating: 4.9
       }
     ]
-  };
+    };
 
-   // Simula o carregamento da página
-  useEffect(() => {
-    const loadTimer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000); // 2 segundos de loading
+    const addToCart = (product: Product) => {
+        try{
+            const existing = productsCart.find(item => item.id === product.id);
+            if (existing) {
+                setProductsCart(productsCart.map(item =>
+                item.id === product.id
+                    ? { ...item, qntd: item.qntd + 1 }
+                    : item
+                ));
+            } else {
+                setProductsCart([
+                ...productsCart,
+                {
+                    ...product,
+                    qntd: 1,
+                    vrProduct: product.price,
+                    vrProductDesconto: product.oldPrice ?? product.price
+                }
+                ]);
+            }
+        }catch(e){
+            console.log(e);
+        }
+        
+    };
 
-    return () => clearTimeout(loadTimer);
-  }, []);
-
-  const addToCart = () => {
-    setCartCount(cartCount + 1);
-  };
-
-  if(isLoading) return <Loading />;
-
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white">
-      {/* Header */}
-     <MenuBar cartCount={cartCount}/>
-
-      {/* Slider */}
-      <Slider/>
-
-      {/* Categories */}
-      <div className="max-w-7xl mx-auto px-4 mt-8">
-        <div className="flex gap-3 overflow-x-auto pb-2">
-          <button
-            onClick={() => setSelectedCategory('ofertas')}
-            className={`px-6 py-2 rounded-full font-semibold whitespace-nowrap transition ${
-              selectedCategory === 'ofertas'
-                ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg'
-                : 'bg-white text-green-700 hover:bg-green-50 border-2 border-green-600'
-            }`}
-          >
-            🔥 Ofertas
-          </button>
-          <button
-            onClick={() => setSelectedCategory('maisVendidos')}
-            className={`px-6 py-2 rounded-full font-semibold whitespace-nowrap transition ${
-              selectedCategory === 'maisVendidos'
-                ? 'bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg'
-                : 'bg-white text-green-700 hover:bg-green-50 border-2 border-green-600'
-            }`}
-          >
-            ⭐ Mais Vendidos
-          </button>
-        </div>
-      </div>
-
-      {/* Products Grid */}
-      <div className="max-w-7xl mx-auto px-4 mt-8 pb-12">
+    return(
+        <div className="max-w-7xl mx-auto px-4 mt-8 pb-12">
         <h2 className="subtitle text-2xl font-bold mb-6">
           {selectedCategory === 'ofertas' ? '🔥 Ofertas Especiais' : '⭐ Mais Vendidos'}
         </h2>
@@ -195,7 +168,7 @@ const GranCerradoEcommerce: React.FC = () => {
                 </div>
 
                 <button
-                  onClick={addToCart}
+                  onClick={() => addToCart(product)}
                   className="add w-full mt-3 text-white py-2 rounded-full font-semibold hover:from-green-700 hover:to-green-600 transition shadow-md hover:shadow-lg"
                 >
                   Adicionar
@@ -205,43 +178,5 @@ const GranCerradoEcommerce: React.FC = () => {
           ))}
         </div>
       </div>
-
-      {/* Info Banner */}
-      <div className="bg-gradient-to-r from-green-700 to-green-600 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-4xl mb-3">🚚</div>
-              <h3 className="font-bold mb-2">Frete Grátis</h3>
-              <p className="text-green-100">Acima de R$ 99,90</p>
-            </div>
-            <div>
-              <div className="text-4xl mb-3">✓</div>
-              <h3 className="font-bold mb-2">100% Natural</h3>
-              <p className="text-green-100">Produtos do Cerrado</p>
-            </div>
-            <div>
-              <div className="text-4xl mb-3">💳</div>
-              <h3 className="font-bold mb-2">Parcele sem juros</h3>
-              <p className="text-green-100">Em até 6x no cartão</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="text-white py-8">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <span className="text-3xl">🌳</span>
-            <h3 className="text-xl font-bold">GRAN CERRADO</h3>
-          </div>
-          <p className="text-green-200 mb-4">Produtos Naturais e Suplementação Esportiva</p>
-          <p className="text-sm text-gray-400">&copy; 2025 Gran Cerrado. Todos os direitos reservados.</p>
-        </div>
-      </footer>
-    </div>
-  );
-};
-
-export default GranCerradoEcommerce;
+    )
+}

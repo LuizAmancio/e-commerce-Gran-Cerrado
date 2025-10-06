@@ -1,10 +1,17 @@
 "use client";
 
+import { CartContext } from '@/context/CartContext';
+import { LoadingContext } from '@/context/LoadingContext';
 import { ShoppingCart, Search, Menu, User } from 'lucide-react';
-import { FC, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 
-export const MenuBar:FC<{ cartCount: number }> = ({ cartCount }) => {
+export const MenuBar:FC = () => {
   const [search, setSearch] = useState(false);
+  const {sizeCart} = useContext(CartContext);
+  const { isLoading} = useContext(LoadingContext);
+
+  if (isLoading) return null;
+
     return (
       <header className="text-white sticky top-0 z-50 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 py-3 md:py-5">
@@ -14,7 +21,7 @@ export const MenuBar:FC<{ cartCount: number }> = ({ cartCount }) => {
             </button>
             
             <div className="flex items-center gap-3 bg-transparent  md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
-              <div className="w-16 h-16 md:w-18 md:h-18 bg-white rounded-full flex items-center justify-center">
+              <div className="w-14 h-14 md:w-18 md:h-18 bg-white rounded-full flex items-center justify-center">
                 <img className="w-full h-full" alt="Logo Gran Cerrado" src="/logoGran.png"/>
               </div>
               <div>
@@ -32,9 +39,9 @@ export const MenuBar:FC<{ cartCount: number }> = ({ cartCount }) => {
               </button>
               <button className="hover:bg-green-600 p-2 rounded-full transition relative cursor-pointer">
                 <ShoppingCart size={20} />
-                {cartCount > 0 && (
+                {sizeCart > 0 && (
                   <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
-                    {cartCount}
+                    {sizeCart}
                   </span>
                 )}
               </button>
@@ -43,7 +50,7 @@ export const MenuBar:FC<{ cartCount: number }> = ({ cartCount }) => {
 
           {/* Search Bar */}
           {search && (
-          <div className="mt-3 relative">
+          <div className="mt-2 md:mt-5 relative">
             <input
               type="text"
               placeholder="Buscar produtos..."
