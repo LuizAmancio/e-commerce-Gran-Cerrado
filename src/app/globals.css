@@ -59,6 +59,10 @@ header{
     background: linear-gradient(135deg, var(--dark-green) 0%, var(--primary-green) 100%);
 }
 
+.sidebar-header {
+    background: linear-gradient(135deg, var(--dark-green) 0%, var(--primary-green) 100%);
+}
+
 .add{
     background: var(--primary-green);
     color: var(--white);
