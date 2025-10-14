@@ -5,12 +5,16 @@ import { FC, useContext, useState } from 'react';
 import { CartContext } from '@/context/CartContext';
 import { LoadingContext } from '@/context/LoadingContext';
 import { ShoppingCart, Search, Menu, User } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export const MenuBar:FC = () => {
   const [search, setSearch] = useState(false);
   const {sizeCart} = useContext(CartContext);
-  const { isLoading} = useContext(LoadingContext);
+  const { isLoading, setIsLoading } = useContext(LoadingContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const router = useRouter();
 
   if (isLoading) return null;
 
@@ -56,37 +60,37 @@ export const MenuBar:FC = () => {
             <div className="flex-1 overflow-y-auto p-6">
               <h3 className="text-gray-400 text-sm font-semibold mb-4 uppercase">Categorias</h3>
               <nav className="space-y-2">
-                <a href="#suplementos" className="flex items-center gap-4 p-3 rounded-lg hover:bg-green-50 transition group">
+                <Link href="/produtos/suplementos" onClick={() => { setIsMenuOpen(false); setIsLoading(true); }} className="flex items-center gap-4 p-3 rounded-lg hover:bg-green-50 transition group">
                   <span className="text-2xl">💪</span>
                   <div>
                     <p className="font-semibold text-gray-800 group-hover:text-green-700">Suplementos</p>
                     <p className="text-xs text-gray-500">Whey, Creatina, BCAA</p>
                   </div>
-                </a>
+                </Link>
 
-                <a href="#castanhas" className="flex items-center gap-4 p-3 rounded-lg hover:bg-green-50 transition group">
+                <Link href="/produtos/castanhas" onClick={() => { setIsMenuOpen(false); setIsLoading(true); }} className="flex items-center gap-4 p-3 rounded-lg hover:bg-green-50 transition group">
                   <span className="text-2xl">🥜</span>
                   <div>
                     <p className="font-semibold text-gray-800 group-hover:text-green-700">Castanhas</p>
                     <p className="text-xs text-gray-500">Pará, Caju, Amendoim</p>
                   </div>
-                </a>
+                </Link>
 
-                <a href="#proteinas" className="flex items-center gap-4 p-3 rounded-lg hover:bg-green-50 transition group">
+                <Link href="/produtos/proteinas" onClick={() => { setIsMenuOpen(false); setIsLoading(true); }} className="flex items-center gap-4 p-3 rounded-lg hover:bg-green-50 transition group">
                   <span className="text-2xl">🍗</span>
                   <div>
                     <p className="font-semibold text-gray-800 group-hover:text-green-700">Proteínas</p>
                     <p className="text-xs text-gray-500">Barras, Snacks Proteicos</p>
                   </div>
-                </a>
+                </Link>
 
-                <a href="#naturais" className="flex items-center gap-4 p-3 rounded-lg hover:bg-green-50 transition group">
+                <Link href="/produtos/naturais" onClick={() => { setIsMenuOpen(false); setIsLoading(true); }} className="flex items-center gap-4 p-3 rounded-lg hover:bg-green-50 transition group">
                   <span className="text-2xl">🌿</span>
                   <div>
                     <p className="font-semibold text-gray-800 group-hover:text-green-700">Naturais</p>
                     <p className="text-xs text-gray-500">Granola, Açaí, Mel</p>
                   </div>
-                </a>
+                </Link>
               </nav>
 
               {/* Seção Extra Lateral */}
@@ -133,8 +137,8 @@ export const MenuBar:FC = () => {
                 className="hover:bg-green-600 p-2 rounded-full transition">
                 <Menu size={28} />
               </button>
-              
-              <div className="flex items-center gap-3 bg-transparent  md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
+
+              <div onClick={() => router.push('/')} className="flex items-center gap-3 bg-transparent  md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 cursor-pointer">
                 <div className="w-14 h-14 md:w-18 md:h-18 bg-white rounded-full flex items-center justify-center">
                   <img className="w-full h-full" alt="Logo Gran Cerrado" src="/logoGran.png"/>
                 </div>

@@ -38,7 +38,9 @@ export default function RootLayout({
         <LoadingProvider>
           <CartProvider>
             <MenuBar />
-            {children}
+            <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white">
+              {children}
+            </div>
             <Footer />
           </CartProvider>
         </LoadingProvider>

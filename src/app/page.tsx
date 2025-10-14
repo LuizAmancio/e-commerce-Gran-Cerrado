@@ -12,6 +12,7 @@ const GranCerradoEcommerce: React.FC = () => {
 
    // Simula o carregamento da página
   useEffect(() => {
+    setIsLoading(true);
     const loadTimer = setTimeout(() => {
       setIsLoading(false);
     }, 2000); // 2 segundos de loading
@@ -22,8 +23,7 @@ const GranCerradoEcommerce: React.FC = () => {
   if(isLoading) return <Loading />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white">
-
+    <>
       {/* Slider */}
       <Slider/>
 
@@ -59,7 +59,7 @@ const GranCerradoEcommerce: React.FC = () => {
       {/* Info Banner */}
       <Banner />
 
-    </div>
+    </>
   );
 };
 
