@@ -238,7 +238,7 @@ export const ProdutosPorCategoria:FC<{ selectedCategory: keyof ProductsByCategor
   };
 
    return (
-    <div className="max-w-7xl mx-auto px-4 pt-6 pb-12" onClick={() => setShowFilters(!showFilters)}>
+    <div className="max-w-7xl mx-auto px-4 pt-6 pb-12" onClick={() => setShowFilters(false)}>
       {/* Header com Título e Filtros */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-800">
